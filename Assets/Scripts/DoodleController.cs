@@ -20,6 +20,11 @@ public class DoodleController : MonoBehaviour
         {
              _rigidbody.velocity = Vector2.up * jumpStrength;
         }
+
+        if (transform.position.y <= -2)
+        {
+            _rigidbody.velocity = Vector2.up * jumpStrength;
+        }
        
     }
 }
