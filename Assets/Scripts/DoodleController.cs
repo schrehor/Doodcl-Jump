@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,13 +19,26 @@ public class DoodleController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-             _rigidbody.velocity = Vector2.up * jumpStrength;
+             
         }
 
-        if (transform.position.y <= -2)
+        // if (transform.position.y <= -2)
+        // {
+        //     _rigidbody.velocity = Vector2.up * jumpStrength;
+        //     GetJumpHeight();
+        // }
+    }
+
+    public float GetJumpHeight()
+    {
+        return Mathf.Pow(jumpStrength, 2) / (2 * _rigidbody.gravityScale);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
         {
             _rigidbody.velocity = Vector2.up * jumpStrength;
         }
-       
     }
 }
