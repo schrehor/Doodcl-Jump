@@ -13,20 +13,14 @@ public class PlayerController : MonoBehaviour
     {
           _rigidbody = GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
+        // todo toto je len na testovanie potom treba vymazat
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _rigidbody.velocity = Vector2.up * jumpStrength;
         }
-
-        // if (transform.position.y <= -2)
-        // {
-        //     _rigidbody.velocity = Vector2.up * jumpStrength;
-        //     GetJumpHeight();
-        // }
     }
 
     public float GetJumpHeight()
