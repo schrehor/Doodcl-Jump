@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private GameObject platformPrefab;
     [SerializeField] private int numberOfPlatforms;
-    [SerializeField] private DoodleController player;
+    [SerializeField] private PlayerController player;
 
     private float _playerJumpHeight;
     private List<GameObject> _platforms = new List<GameObject>();

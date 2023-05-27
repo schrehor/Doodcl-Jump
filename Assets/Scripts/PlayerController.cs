@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoodleController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float jumpStrength;
 
@@ -19,7 +19,7 @@ public class DoodleController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-             
+            _rigidbody.velocity = Vector2.up * jumpStrength;
         }
 
         // if (transform.position.y <= -2)
@@ -34,11 +34,12 @@ public class DoodleController : MonoBehaviour
         return Mathf.Pow(jumpStrength, 2) / (2 * _rigidbody.gravityScale);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Platform"))
         {
             _rigidbody.velocity = Vector2.up * jumpStrength;
+            //_rigidbody.AddForce(Vector2.up * jumpStrength, ForceMode2D.Impulse);
         }
     }
 }
