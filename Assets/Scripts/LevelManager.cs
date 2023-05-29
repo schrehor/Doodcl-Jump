@@ -6,20 +6,19 @@ using UnityEngine.PlayerLoop;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private GameObject platformPrefab;
-    [SerializeField] private int numberOfPlatforms;
+    // [SerializeField] private GameObject platformPrefab;
+    // [SerializeField] private int numberOfPlatforms;
     [SerializeField] private PlayerController player;
 
     private float _playerJumpHeight;
     private List<GameObject> _platforms = new List<GameObject>();
     
-    // 1 najprv spawnut prvych 10 platforiem do okna bez toho aby sa touchovali
-    // 2 kontrolovat ci nejaka nespadla pod obrazovku a ak hej tak ju presunut nad nech postupne spadne
+    
     private void Start()
     {
-        var size = platformPrefab.GetComponent<Platform>().Size;
-        Instantiate(platformPrefab, transform.position, transform.rotation);
-        int minX = 0;
+        // var size = platformPrefab.GetComponent<Platform>().Size;
+        // Instantiate(platformPrefab, transform.position, transform.rotation);
+        // int minX = 0;
         //int maxX = Screen.width - platformPrefab.GetComponent<>;
         
         //_playerJumpHeight = player.GetJumpHeight();
