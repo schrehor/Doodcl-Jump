@@ -4,46 +4,42 @@ using UnityEngine;
 
 public class PlatformSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject platform;
+    [SerializeField] private GameObject platformPrefab;
+    [SerializeField] private int initialPlatformCount;
 
-    public int NumberOfPlatforms { get; set; } = 10;
+    private float minYGap;
+    private float maxYGap;
+    private float minPlatformY;
+    private float maxPlatformY;
+    private float halfPlatformWidth;
 
-    // 1 najprv spawnut prvych 10 platforiem do okna bez toho aby sa touchovali
-    // 2 kontrolovat ci nejaka nespadla pod obrazovku a ak hej tak ju presunut nad nech postupne spadne
-    
-    public GameObject[] platformPrefabs;
-    public int numberOfPlatforms = 10;
-    public float minY = -6f, maxY = 6f;
-
-    void Start()
+    public void Initialize(PlayerController player)
     {
-        for (int i = 0; i < numberOfPlatforms; i++)
-        {
-            SpawnRandomPlatform();
-        }
+        // Calculate the min and max Y gap based on the player's maximum jump height
+        float maxJumpHeight = player.GetJumpHeight();
+        
+
+        SpawnInitialPlatforms(maxJumpHeight);
     }
 
-    void Update()
+    private void SpawnInitialPlatforms(float offset)
     {
-        // Check if there are less than `numberOfPlatforms` in the scene
-        GameObject[] existingPlatforms = GameObject.FindGameObjectsWithTag("Platform");
-        if (existingPlatforms.Length < numberOfPlatforms)
-        {
-            SpawnRandomPlatform();
-        }
+        float lowestPointy = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
+        float highestPointy = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y;
+        float lowestPointx = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        float highestPointx = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+
+        float platformWidth = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.x;
+        float platformHeight = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.y;
+        
+        Instantiate(platformPrefab, new Vector3(lowestPointx + platformWidth, lowestPointy + platformHeight, 0), Quaternion.identity);
+        Instantiate(platformPrefab, new Vector3(lowestPointx + platformWidth, highestPointy - platformHeight, 0), Quaternion.identity);
+        Instantiate(platformPrefab, new Vector3(highestPointx - platformWidth, lowestPointy + platformHeight, 0), Quaternion.identity);
+        Instantiate(platformPrefab, new Vector3(highestPointx - platformWidth, highestPointy - platformHeight, 0), Quaternion.identity);
+        
+        Instantiate(platformPrefab, new Vector3(0, lowestPointy + platformHeight, 0), Quaternion.identity);
+        Instantiate(platformPrefab, new Vector3(1, lowestPointy + platformHeight + offset, 0), Quaternion.identity);
+        Instantiate(platformPrefab, new Vector3(2, lowestPointy + platformHeight + offset * 2, 0), Quaternion.identity);
     }
 
-    void SpawnRandomPlatform()
-    {
-        // Choose a random platform type
-        GameObject platformPrefab = platformPrefabs[Random.Range(0, platformPrefabs.Length)];
-
-        // Choose a random position
-        float x = Random.Range(-2.5f, 2.5f);
-        float y = Random.Range(minY, maxY);
-        Vector2 position = new Vector2(x, y);
-
-        // Instantiate the platform
-        Instantiate(platformPrefab, position, Quaternion.identity);
-    }
 }

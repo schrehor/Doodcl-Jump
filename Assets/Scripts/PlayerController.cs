@@ -10,10 +10,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Animator _animator;
     private float _speed;
+    
     private static readonly int Direction = Animator.StringToHash("Direction");
     private static readonly int Jumping = Animator.StringToHash("Jumping");
 
-    void Start()
+    void Awake()
     {
           _rigidbody = GetComponent<Rigidbody2D>();
           _animator = GetComponent<Animator>();
@@ -70,7 +71,11 @@ public class PlayerController : MonoBehaviour
 
     public float GetJumpHeight()
     {
-        return Mathf.Pow(jumpStrength, 2) / (2 * _rigidbody.gravityScale);
+        float jumpHeight = Mathf.Pow(jumpStrength, 2) / (2 * _rigidbody.gravityScale);
+        float viewportHeight = Camera.main.orthographicSize * 2f;
+        float jumpHeightViewport = jumpHeight / viewportHeight;
+        
+        return jumpHeightViewport;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

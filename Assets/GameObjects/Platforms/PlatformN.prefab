@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8389555344161646160}
   - component: {fileID: 8389555344161646161}
   - component: {fileID: 4204084959862113446}
-  - component: {fileID: 1473652911820511095}
+  - component: {fileID: 6976100849694893063}
   - component: {fileID: 3977373598617162371}
   m_Layer: 0
   m_Name: PlatformN
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canSpawnPowerUp: 0
   canSpawnMonster: 0
---- !u!68 &1473652911820511095
+--- !u!68 &6976100849694893063
 EdgeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,11 +114,11 @@ EdgeCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.15}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -0.295, y: 0}
-  - {x: 0.295, y: 0}
+  - {x: -0.4633079, y: 0.0014615357}
+  - {x: 0.45161557, y: 0}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
