@@ -7,17 +7,9 @@ public class PlatformSpawner : MonoBehaviour
     [SerializeField] private GameObject platformPrefab;
     [SerializeField] private int initialPlatformCount;
 
-    private float minYGap;
-    private float maxYGap;
-    private float minPlatformY;
-    private float maxPlatformY;
-    private float halfPlatformWidth;
-
     public void Initialize(PlayerController player)
     {
-        // Calculate the min and max Y gap based on the player's maximum jump height
         float maxJumpHeight = player.GetJumpHeight();
-        
 
         SpawnInitialPlatforms(maxJumpHeight);
     }
