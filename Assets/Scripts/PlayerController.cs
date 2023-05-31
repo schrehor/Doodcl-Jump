@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // todo zmenit collider na iny a vyskusat ci stale je "divny" skok
         if (collision.gameObject.CompareTag("Platform"))
         {
             _animator.SetTrigger(Jumping);
