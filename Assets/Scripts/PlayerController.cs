@@ -67,6 +67,11 @@ public class PlayerController : MonoBehaviour
         Vector2 newPosition = transform.position;
         newPosition.x += moveX * _speed * Time.deltaTime;
         transform.position = newPosition;
+        
+        //todo zlepsienie pohybu
+        // Vector2 velocity = _rigidbody.velocity;
+        // velocity.x = moveX / _speed;
+        // _rigidbody.velocity = velocity;
     }
 
     public float GetJumpHeight()
