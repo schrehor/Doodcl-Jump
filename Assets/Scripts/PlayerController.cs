@@ -85,11 +85,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // todo zmenit collider na iny a vyskusat ci stale je "divny" skok
         if (collision.gameObject.CompareTag("Platform"))
         {
-            _animator.SetTrigger(Jumping);
-            _rigidbody.velocity = Vector2.up * jumpStrength;
+            if (collision.relativeVelocity.y > 0)
+            { 
+                _animator.SetTrigger(Jumping);
+                _rigidbody.velocity = Vector2.up * jumpStrength;
+            }
         }
     }
 }
