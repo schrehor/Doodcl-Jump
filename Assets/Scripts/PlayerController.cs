@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
             _rigidbody.velocity = Vector2.up * jumpStrength;
         }
 
+        //todo na move pouzit fixed update
         Move();
         ResetJumpTrigger();
     }

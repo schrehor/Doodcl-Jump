@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlatformSpawner : MonoBehaviour
 {
@@ -42,10 +43,21 @@ public class PlatformSpawner : MonoBehaviour
         Instantiate(platformPrefab, new Vector3(_minX, _maxY, 0), Quaternion.identity);
         Instantiate(platformPrefab, new Vector3(_maxX, _minY, 0), Quaternion.identity);
         Instantiate(platformPrefab, new Vector3(_maxX, _maxY, 0), Quaternion.identity);
-
+        
         Instantiate(platformPrefab, new Vector3(0, _minY, 0), Quaternion.identity);
         Instantiate(platformPrefab, new Vector3(1, _minY + offset, 0), Quaternion.identity);
         Instantiate(platformPrefab, new Vector3(2, _minY + offset * 2, 0), Quaternion.identity);
+
+        // Vector3 spawnposition = new Vector3();
+        // float y = 0;
+        //
+        // for (int i = 0; i < initialPlatformCount; i++)
+        // {
+        //     spawnposition.x = Random.Range(_minX, _maxX);
+        //     y = Random.Range(y * i, _maxY);
+        //     spawnposition.y = Random.Range(_minY + offset * i, (_minY + offset) + offset * i);
+        //     Instantiate(platformPrefab, spawnposition, Quaternion.identity);
+        // }
     }
 
 }
