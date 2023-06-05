@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Animator _animator;
     private float _speed;
+    private Camera _camera;
+    private float _screenWidth;
     
     private static readonly int Direction = Animator.StringToHash("Direction");
     private static readonly int Jumping = Animator.StringToHash("Jumping");
@@ -19,10 +21,14 @@ public class PlayerController : MonoBehaviour
           _rigidbody = GetComponent<Rigidbody2D>();
           _animator = GetComponent<Animator>();
           _speed = jumpStrength / 2;
+          _camera = Camera.main;
+          if (_camera != null) _screenWidth = _camera.orthographicSize * 2f * _camera.aspect;
     }
     
     void Update()
     {
+        WrapAroundScreen();
+        
         // todo toto je len na testovanie potom treba vymazat
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -95,4 +101,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
+    void WrapAroundScreen()
+    {
+        Vector3 currentPosition = transform.position;
+
+        if (currentPosition.x < -_screenWidth / 2f)
+        {
+            currentPosition.x = _screenWidth / 2f;
+        }
+        else if (currentPosition.x > _screenWidth / 2f)
+        {
+            currentPosition.x = -_screenWidth / 2f;
+        }
+
+        transform.position = currentPosition;
+    }
+
 }
