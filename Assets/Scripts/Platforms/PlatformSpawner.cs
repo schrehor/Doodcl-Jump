@@ -34,30 +34,36 @@ public class PlatformSpawner : MonoBehaviour
     {
         float maxJumpHeight = player.GetJumpHeight();
 
-        SpawnInitialPlatforms(maxJumpHeight);
+        SpawnInitialPlatforms(player);
     }
 
-    private void SpawnInitialPlatforms(float offset)
+    private void SpawnInitialPlatforms(PlayerController player)
     {
-        Instantiate(platformPrefab, new Vector3(_minX, _minY, 0), Quaternion.identity);
-        Instantiate(platformPrefab, new Vector3(_minX, _maxY, 0), Quaternion.identity);
-        Instantiate(platformPrefab, new Vector3(_maxX, _minY, 0), Quaternion.identity);
-        Instantiate(platformPrefab, new Vector3(_maxX, _maxY, 0), Quaternion.identity);
-        
-        Instantiate(platformPrefab, new Vector3(0, _minY, 0), Quaternion.identity);
-        Instantiate(platformPrefab, new Vector3(1, _minY + offset, 0), Quaternion.identity);
-        Instantiate(platformPrefab, new Vector3(2, _minY + offset * 2, 0), Quaternion.identity);
-
-        // Vector3 spawnposition = new Vector3();
-        // float y = 0;
+        // Instantiate(platformPrefab, new Vector3(_minX, _minY, 0), Quaternion.identity);
+        // Instantiate(platformPrefab, new Vector3(_minX, _maxY, 0), Quaternion.identity);
+        // Instantiate(platformPrefab, new Vector3(_maxX, _minY, 0), Quaternion.identity);
+        // Instantiate(platformPrefab, new Vector3(_maxX, _maxY, 0), Quaternion.identity);
         //
-        // for (int i = 0; i < initialPlatformCount; i++)
-        // {
-        //     spawnposition.x = Random.Range(_minX, _maxX);
-        //     y = Random.Range(y * i, _maxY);
-        //     spawnposition.y = Random.Range(_minY + offset * i, (_minY + offset) + offset * i);
-        //     Instantiate(platformPrefab, spawnposition, Quaternion.identity);
-        // }
+        // Instantiate(platformPrefab, new Vector3(0, _minY, 0), Quaternion.identity);
+        // Instantiate(platformPrefab, new Vector3(1, _minY + offset, 0), Quaternion.identity);
+        // Instantiate(platformPrefab, new Vector3(2, _minY + offset * 2, 0), Quaternion.identity);
+
+        Vector3 spawnposition = new Vector3(0,_minY,0);
+        
+        for (int i = 0; i < initialPlatformCount; i++)
+        {
+            if (i == 0)
+            {
+                spawnposition.x = player.transform.position.x;
+            }
+            else
+            {
+                spawnposition.x = Random.Range(_minX, _maxX);
+            }
+            
+            spawnposition.y += Random.Range(.5f, 2f);
+            Instantiate(platformPrefab, spawnposition, Quaternion.identity);
+        }
     }
 
 }

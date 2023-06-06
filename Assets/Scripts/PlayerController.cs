@@ -71,14 +71,14 @@ public class PlayerController : MonoBehaviour
         transform.localScale = scale;
         
         // Pohyb hraca
-        Vector2 newPosition = transform.position;
-        newPosition.x += moveX * _speed * Time.deltaTime;
-        transform.position = newPosition;
+        // Vector2 newPosition = transform.position;
+        // newPosition.x += moveX * _speed * Time.deltaTime;
+        // transform.position = newPosition;
         
         //todo zlepsienie pohybu
-        // Vector2 velocity = _rigidbody.velocity;
-        // velocity.x = moveX / _speed;
-        // _rigidbody.velocity = velocity;
+        Vector2 velocity = _rigidbody.velocity;
+        velocity.x = moveX * _speed;
+        _rigidbody.velocity = velocity;
     }
 
     public float GetJumpHeight()
