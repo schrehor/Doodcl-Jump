@@ -7,12 +7,14 @@ namespace Platforms
     public class PlatformBreakable : Platform
     {
         private Animator _animator;
+        private Sprite _sprite;
         
         private static readonly int Break = Animator.StringToHash("Break");
 
         private void Start()
         {
             _animator = GetComponent<Animator>();
+            _sprite = GetComponent<SpriteRenderer>().sprite;
         }
         
         private void OnTriggerEnter2D(Collider2D other)
@@ -27,6 +29,12 @@ namespace Platforms
         private void DisablePlatform()
         {
             gameObject.SetActive(false);
+        }
+
+        private new void Reset()
+        {
+            GetComponent<SpriteRenderer>().sprite = _sprite;
+            gameObject.SetActive(true);
         }
     }
 }

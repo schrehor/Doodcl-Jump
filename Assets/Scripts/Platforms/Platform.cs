@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Platforms
@@ -15,6 +16,11 @@ namespace Platforms
         public void SpawnMonster()
         {
        
+        }
+
+        public void Reset()
+        {
+           
         }
     }
 }

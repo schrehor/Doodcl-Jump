@@ -7,7 +7,7 @@ namespace Platforms
 {
     public class PlatformSpawner : MonoBehaviour
     {
-        [SerializeField] private GameObject platformPrefab;
+        [SerializeField] private GameObject[] platformPrefabs;
         [SerializeField] private int initialPlatformCount;
 
         public float bottomOffsetY = .5f;
@@ -19,7 +19,8 @@ namespace Platforms
         private float _maxY;
         private float _maxX;
     
-        private readonly List<GameObject> _platforms = new();
+        private readonly List<GameObject> _pathPlatforms = new();
+        private readonly List<GameObject> _extraPlatforms = new();
         private Camera _camera;
 
         private void Awake()
@@ -33,8 +34,8 @@ namespace Platforms
                 float lowestPointX = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
                 float highestPointX = _camera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
 
-                float platformWidth = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.x;
-                float platformHeight = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.y;
+                float platformWidth = platformPrefabs[0].GetComponent<SpriteRenderer>().bounds.extents.x;
+                float platformHeight = platformPrefabs[0].GetComponent<SpriteRenderer>().bounds.extents.y;
 
                 _minX = lowestPointX + platformWidth;
                 _minY = _cameraBottomY + platformHeight;
@@ -46,14 +47,44 @@ namespace Platforms
         private void Update()
         {
             _cameraBottomY = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
-            _platforms.Where(x => x.transform.position.y < _cameraBottomY).ToList().ForEach(MovePlatform);
+            _pathPlatforms.Where(x => x.transform.position.y < _cameraBottomY).ToList().ForEach(MovePlatform);
         }
 
         private void MovePlatform(GameObject platform)
         {
-            float lastHeight = _platforms.Max(x => x.transform.position.y);
-        
-            platform.transform.position = new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0);
+            float lastHeight = _pathPlatforms.Max(x => x.transform.position.y);
+
+            if (platform.GetComponent<Platform>() is PlatformBreakable plat)
+            {
+                plat.
+                int a = 5;
+            }
+            
+            if (Random.Range(0,10) == 0)
+            {
+                DestroyPlatform(platform);
+                GenerateSpecialPlatform(lastHeight);
+            }
+            else
+            {
+                platform.GetComponent<Platform>().Reset();
+                platform.transform.position = new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0);
+            }
+        }
+
+        private void DestroyPlatform(GameObject platform)
+        {
+            _pathPlatforms.Remove(platform);
+            Destroy(platform);
+        }
+
+        private void GenerateSpecialPlatform(float lastHeight)
+        {
+            //Random.Range(0, platformPrefabs.Length)
+            GameObject platform1 = Instantiate(platformPrefabs[1], new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0), Quaternion.identity);
+            GameObject platform2 = Instantiate(platformPrefabs[0], new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0), Quaternion.identity);
+            _pathPlatforms.Add(platform1);
+            _pathPlatforms.Add(platform2);
         }
 
         public void Initialize(PlayerController player)
@@ -88,8 +119,8 @@ namespace Platforms
                 }
             
                 spawnPosition.y += Random.Range(bottomOffsetY, topOffsetY);
-                GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
-                _platforms.Add(platform);
+                GameObject platform = Instantiate(platformPrefabs[0], spawnPosition, Quaternion.identity);
+                _pathPlatforms.Add(platform);
             }
         }
 
