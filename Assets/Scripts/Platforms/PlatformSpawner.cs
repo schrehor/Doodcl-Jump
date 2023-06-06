@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,14 +10,20 @@ public class PlatformSpawner : MonoBehaviour
     [SerializeField] private GameObject platformPrefab;
     [SerializeField] private int initialPlatformCount;
 
+    public float bottomOffsetY = .5f;
+    public float topOffsetY = 2f;
+
+    private float _cameraBottom;
     private float _minY;
     private float _minX;
     private float _maxY;
     private float _maxX;
+    
+    private List<GameObject> _platforms = new List<GameObject>();
 
     private void Awake()
     {
-        float lowestPointY = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
+        _cameraBottom = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
         float highestPointY = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y;
         float lowestPointX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         float highestPointX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
@@ -25,9 +32,22 @@ public class PlatformSpawner : MonoBehaviour
         float platformHeight = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.y;
 
         _minX = lowestPointX + platformWidth;
-        _minY = lowestPointY + platformHeight;
+        _minY = _cameraBottom + platformHeight;
         _maxX = highestPointX - platformWidth;
         _maxY = highestPointY - platformHeight;
+    }
+
+    private void Update()
+    {
+        _cameraBottom = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
+        _platforms.Where(x => x.transform.position.y < _cameraBottom).ToList().ForEach(MovePlatform);
+    }
+
+    private void MovePlatform(GameObject platform)
+    {
+        float lastHeight = _platforms.Max(x => x.transform.position.y);
+        
+        platform.transform.position = new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0);
     }
 
     public void Initialize(PlayerController player)
@@ -61,8 +81,9 @@ public class PlatformSpawner : MonoBehaviour
                 spawnposition.x = Random.Range(_minX, _maxX);
             }
             
-            spawnposition.y += Random.Range(.5f, 2f);
-            Instantiate(platformPrefab, spawnposition, Quaternion.identity);
+            spawnposition.y += Random.Range(bottomOffsetY, topOffsetY);
+            GameObject platform = Instantiate(platformPrefab, spawnposition, Quaternion.identity);
+            _platforms.Add(platform);
         }
     }
 

@@ -352,7 +352,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platformPrefab: {fileID: 8389555344161646172, guid: f449a9a23da1d40879a9a210c7d5feab, type: 3}
-  initialPlatformCount: 100
+  initialPlatformCount: 20
+  bottomOffsetY: 0.5
+  topOffsetY: 2
 --- !u!114 &1212558381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +656,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.018711716, y: -0.42288494}
+  m_Offset: {x: -0.018711716, y: -0.50332224}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -665,7 +667,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5514087, y: 0.2718985}
+  m_Size: {x: 0.5514087, y: 0.1110239}
   m_EdgeRadius: 0
 --- !u!70 &1786942653
 CapsuleCollider2D:
