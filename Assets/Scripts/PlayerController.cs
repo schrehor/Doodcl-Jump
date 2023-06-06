@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private static readonly int Direction = Animator.StringToHash("Direction");
     private static readonly int Jumping = Animator.StringToHash("Jumping");
 
+    public Action OnPlayerDeath;
+
     void Awake()
     {
           _rigidbody = GetComponent<Rigidbody2D>();
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
+        CheckDeath();
         WrapAroundScreen();
         
         // todo toto je len na testovanie potom treba vymazat
@@ -38,6 +41,14 @@ public class PlayerController : MonoBehaviour
         //todo na move pouzit fixed update
         Move();
         ResetJumpTrigger();
+    }
+
+    private void CheckDeath()
+    {
+        if (transform.position.y < _camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).y)
+        {
+            OnPlayerDeath?.Invoke();
+        }
     }
 
     private void ResetJumpTrigger()
@@ -70,12 +81,11 @@ public class PlayerController : MonoBehaviour
         }
         transform.localScale = scale;
         
-        // Pohyb hraca
+        // Pohyb hraca old
         // Vector2 newPosition = transform.position;
         // newPosition.x += moveX * _speed * Time.deltaTime;
         // transform.position = newPosition;
         
-        //todo zlepsienie pohybu
         Vector2 velocity = _rigidbody.velocity;
         velocity.x = moveX * _speed;
         _rigidbody.velocity = velocity;

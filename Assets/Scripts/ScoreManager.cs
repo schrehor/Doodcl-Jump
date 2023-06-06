@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,24 +7,38 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
+    public static ScoreManager Instance { get; private set; }
+    
     public Text scoreText;
 
-    private float _topScore = 0.0f;
+    //public float TopScore { get; private set; }
+    public float GameScore { get; private set; }
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        Instance = this;
+    }
+    
     void Start()
     {
-        scoreText.text = Mathf.Round(_topScore).ToString(CultureInfo.InvariantCulture);
+        scoreText.text = Mathf.Round(GameScore).ToString(CultureInfo.InvariantCulture);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        if (transform.position.y > _topScore)
+        if (transform.position.y > GameScore)
         {
-            _topScore = transform.position.y;
+            GameScore = transform.position.y;
         }
         
-        scoreText.text = Mathf.Round(_topScore).ToString(CultureInfo.InvariantCulture);;
+        scoreText.text = Mathf.Round(GameScore).ToString(CultureInfo.InvariantCulture);;
     }
+    
+    // public void UpdateTopScore()
+    // {
+    //     if (GameScore > TopScore)
+    //     {
+    //         TopScore = GameScore;
+    //     }
+    // }
 }
