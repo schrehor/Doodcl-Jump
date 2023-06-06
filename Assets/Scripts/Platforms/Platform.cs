@@ -1,22 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Platform : MonoBehaviour
+namespace Platforms
 {
-    public bool canSpawnPowerUp;
-    public bool canSpawnMonster;
-    // Add other shared properties here
-
-    // Add shared methods here
-    public void SpawnPowerUp()
+    public abstract class Platform : MonoBehaviour
     {
-        // Your code for spawning a power up
-    }
+        public bool canSpawnPowerUp;
+        public bool canSpawnMonster;
+    
+        public void SpawnPowerUp()
+        {
+        
+        }
 
-    public void SpawnMonster()
-    {
-        // Your code for spawning a monster
+        public void SpawnMonster()
+        {
+       
+        }
     }
 }
 
