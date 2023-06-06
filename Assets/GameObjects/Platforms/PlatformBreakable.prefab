@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1473652911820511095}
   - component: {fileID: 3977373598617162371}
   - component: {fileID: 5774283305769287068}
+  - component: {fileID: 7355573433592526777}
   m_Layer: 0
   m_Name: PlatformBreakable
   m_TagString: Platform
@@ -97,7 +98,7 @@ EdgeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.15}
@@ -142,3 +143,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canSpawnPowerUp: 0
   canSpawnMonster: 0
+--- !u!95 &7355573433592526777
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8389555344161646172}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17968084f8a2f774f97e85c40c170e8a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
