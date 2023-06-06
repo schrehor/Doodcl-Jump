@@ -13,34 +13,40 @@ public class PlatformSpawner : MonoBehaviour
     public float bottomOffsetY = .5f;
     public float topOffsetY = 2f;
 
-    private float _cameraBottom;
+    private float _cameraBottomY;
     private float _minY;
     private float _minX;
     private float _maxY;
     private float _maxX;
     
-    private List<GameObject> _platforms = new List<GameObject>();
+    private readonly List<GameObject> _platforms = new();
+    private Camera _camera;
 
     private void Awake()
     {
-        _cameraBottom = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
-        float highestPointY = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y;
-        float lowestPointX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
-        float highestPointX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+        _camera = Camera.main;
 
-        float platformWidth = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.x;
-        float platformHeight = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.y;
+        if (_camera != null)
+        {
+            _cameraBottomY = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
+            float highestPointY = _camera.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y;
+            float lowestPointX = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+            float highestPointX = _camera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
 
-        _minX = lowestPointX + platformWidth;
-        _minY = _cameraBottom + platformHeight;
-        _maxX = highestPointX - platformWidth;
-        _maxY = highestPointY - platformHeight;
+            float platformWidth = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.x;
+            float platformHeight = platformPrefab.GetComponent<SpriteRenderer>().bounds.extents.y;
+
+            _minX = lowestPointX + platformWidth;
+            _minY = _cameraBottomY + platformHeight;
+            _maxX = highestPointX - platformWidth;
+            _maxY = highestPointY - platformHeight;
+        }
     }
 
     private void Update()
     {
-        _cameraBottom = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
-        _platforms.Where(x => x.transform.position.y < _cameraBottom).ToList().ForEach(MovePlatform);
+        _cameraBottomY = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
+        _platforms.Where(x => x.transform.position.y < _cameraBottomY).ToList().ForEach(MovePlatform);
     }
 
     private void MovePlatform(GameObject platform)
@@ -68,21 +74,21 @@ public class PlatformSpawner : MonoBehaviour
         // Instantiate(platformPrefab, new Vector3(1, _minY + offset, 0), Quaternion.identity);
         // Instantiate(platformPrefab, new Vector3(2, _minY + offset * 2, 0), Quaternion.identity);
 
-        Vector3 spawnposition = new Vector3(0,_minY,0);
+        Vector3 spawnPosition = new Vector3(0,_minY,0);
         
         for (int i = 0; i < initialPlatformCount; i++)
         {
             if (i == 0)
             {
-                spawnposition.x = player.transform.position.x;
+                spawnPosition.x = player.transform.position.x;
             }
             else
             {
-                spawnposition.x = Random.Range(_minX, _maxX);
+                spawnPosition.x = Random.Range(_minX, _maxX);
             }
             
-            spawnposition.y += Random.Range(bottomOffsetY, topOffsetY);
-            GameObject platform = Instantiate(platformPrefab, spawnposition, Quaternion.identity);
+            spawnPosition.y += Random.Range(bottomOffsetY, topOffsetY);
+            GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
             _platforms.Add(platform);
         }
     }
