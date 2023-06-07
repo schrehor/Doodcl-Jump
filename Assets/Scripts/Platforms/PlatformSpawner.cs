@@ -8,7 +8,8 @@ namespace Platforms
     public class PlatformSpawner : MonoBehaviour
     {
         [SerializeField] private GameObject[] platformPrefabs;
-        [SerializeField] private int initialPlatformCount;
+        private const int PathPlatformCount = 15;
+        private const int ExtraPlatformCount = 5;
 
         public float bottomOffsetY = .5f;
         public float topOffsetY = 2f;
@@ -18,7 +19,7 @@ namespace Platforms
         private float _minX;
         private float _maxY;
         private float _maxX;
-    
+
         private readonly List<GameObject> _pathPlatforms = new();
         private readonly List<GameObject> _extraPlatforms = new();
         private Camera _camera;
@@ -53,24 +54,75 @@ namespace Platforms
         private void MovePlatform(GameObject platform)
         {
             float lastHeight = _pathPlatforms.Max(x => x.transform.position.y);
-
-            if (platform.GetComponent<Platform>() is PlatformBreakable plat)
-            {
-                plat.
-                int a = 5;
-            }
+            platform.transform.position = new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0);
             
             if (Random.Range(0,10) == 0)
             {
-                DestroyPlatform(platform);
-                GenerateSpecialPlatform(lastHeight);
+                // DestroyPlatform(platform);
+                // GenerateSpecialPlatform(lastHeight);
             }
             else
             {
-                platform.GetComponent<Platform>().Reset();
-                platform.transform.position = new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0);
+                
             }
         }
+
+        private void MoveExtraPlatforms()
+        {
+            GetComponent<Platform>().Reset();
+        }
+        
+        private void SpawnExtraPlatforms()
+        {
+            var y1 = _pathPlatforms.Min(x => x.transform.position.y);
+            var y2 = _pathPlatforms.Max(x => x.transform.position.y);
+            
+            for (int i = 0; i < ExtraPlatformCount; i++)
+            {
+                Vector3 spawnPoint = new Vector3(Random.Range(_minX, _maxX), Random.Range(y1, y2), 0);
+                if (CheckCollisions(spawnPoint))
+                {
+                    GameObject platform = Instantiate(platformPrefabs[1], spawnPoint, Quaternion.identity);
+                    _extraPlatforms.Add(platform);
+                }
+            }
+        }
+        
+        private bool CheckCollisions(Vector3 spawnPoint)
+        {
+            List<GameObject> platforms = _pathPlatforms.Concat(_extraPlatforms).ToList();
+
+            float platformHeight = platformPrefabs[0].GetComponent<SpriteRenderer>().bounds.extents.y;
+            float platformWidth = platformPrefabs[0].GetComponent<SpriteRenderer>().bounds.extents.x;
+
+            Vector3 raycastOffset = new Vector3(0, platformHeight, 0);
+
+            foreach (var platform in platforms)
+            {
+                Vector3 existingPosition = platform.transform.position;
+                Vector2 existingSize = platform.GetComponent<SpriteRenderer>().bounds.size;
+                
+                float existingHalfWidth = existingSize.x / 2f;
+                float existingHalfHeight = existingSize.y / 2f;
+                
+                Vector3 leftRaycastOrigin = spawnPoint + raycastOffset + new Vector3(-existingHalfWidth, 0, 0);
+                Vector3 rightRaycastOrigin = spawnPoint + raycastOffset + new Vector3(existingHalfWidth, 0, 0);
+                
+                Vector2 leftRaycastDirection = Vector2.down;
+                Vector2 rightRaycastDirection = Vector2.down;
+                
+                RaycastHit2D leftHit = Physics2D.Raycast(leftRaycastOrigin, leftRaycastDirection, platformHeight);
+                RaycastHit2D rightHit = Physics2D.Raycast(rightRaycastOrigin, rightRaycastDirection, platformHeight);
+                
+                if (leftHit.collider != null || rightHit.collider != null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
 
         private void DestroyPlatform(GameObject platform)
         {
@@ -80,11 +132,9 @@ namespace Platforms
 
         private void GenerateSpecialPlatform(float lastHeight)
         {
-            //Random.Range(0, platformPrefabs.Length)
-            GameObject platform1 = Instantiate(platformPrefabs[1], new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0), Quaternion.identity);
-            GameObject platform2 = Instantiate(platformPrefabs[0], new Vector3(Random.Range(_minX, _maxX), lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0), Quaternion.identity);
-            _pathPlatforms.Add(platform1);
-            _pathPlatforms.Add(platform2);
+            GameObject platform = Instantiate(platformPrefabs[1], new Vector3(Random.Range(_minX, _maxX), 
+                lastHeight + Random.Range(bottomOffsetY, topOffsetY), 0), Quaternion.identity);
+            _pathPlatforms.Add(platform);
         }
 
         public void Initialize(PlayerController player)
@@ -96,18 +146,9 @@ namespace Platforms
 
         private void SpawnInitialPlatforms(PlayerController player)
         {
-            // Instantiate(platformPrefab, new Vector3(_minX, _minY, 0), Quaternion.identity);
-            // Instantiate(platformPrefab, new Vector3(_minX, _maxY, 0), Quaternion.identity);
-            // Instantiate(platformPrefab, new Vector3(_maxX, _minY, 0), Quaternion.identity);
-            // Instantiate(platformPrefab, new Vector3(_maxX, _maxY, 0), Quaternion.identity);
-            //
-            // Instantiate(platformPrefab, new Vector3(0, _minY, 0), Quaternion.identity);
-            // Instantiate(platformPrefab, new Vector3(1, _minY + offset, 0), Quaternion.identity);
-            // Instantiate(platformPrefab, new Vector3(2, _minY + offset * 2, 0), Quaternion.identity);
-
             Vector3 spawnPosition = new Vector3(0,_minY,0);
         
-            for (int i = 0; i < initialPlatformCount; i++)
+            for (int i = 0; i < PathPlatformCount; i++)
             {
                 if (i == 0)
                 {
@@ -122,7 +163,8 @@ namespace Platforms
                 GameObject platform = Instantiate(platformPrefabs[0], spawnPosition, Quaternion.identity);
                 _pathPlatforms.Add(platform);
             }
+            
+            //SpawnExtraPlatforms();
         }
-
     }
 }
